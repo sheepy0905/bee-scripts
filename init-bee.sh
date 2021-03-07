@@ -1,4 +1,4 @@
-#!/bin/bash
+#1/usr/bin/env sh
 
 # install jq
 apt install -y jq
