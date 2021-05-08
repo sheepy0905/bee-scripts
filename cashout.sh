@@ -1,6 +1,6 @@
-#1/usr/bin/env sh
-DEBUG_API=http://localhost:1635
-MIN_AMOUNT=10000
+#!/usr/bin/env bash
+[ -z ${DEBUG_API+x} ] && DEBUG_API=http://localhost:1635
+[ -z ${MIN_AMOUNT+x} ] && MIN_AMOUNT=10000
 
 function getPeers() {
   curl -s "$DEBUG_API/chequebook/cheque" | jq -r '.lastcheques | .[].peer'
@@ -44,11 +44,11 @@ function getUncashedAmount() {
 
 function cashout() {
   local peer=$1
-  txHash=$(curl -s -XPOST "$DEBUG_API/chequebook/cashout/$peer" | jq -r .transactionHash)
-
-  if [ $txHash == null ]
+  local response=$(curl -s -XPOST "$DEBUG_API/chequebook/cashout/$peer")  
+  local txHash=$(echo "$response" | jq -r .transactionHash)
+  if [ "$txHash" == "null" ]
   then
-    echo "Unable to cashout peer $1"
+    echo could not cash out cheque for $peer: $(echo "$response" | jq -r .code,.message)
     return
   fi
 
