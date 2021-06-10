@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  geth-1:
+    image: ethereum/client-go:stable
+    restart: unless-stopped
+    environment:
+    ports:
+      - "30303:30303"
+      - "30303:30303/udp"
+      - "10.1.96.23:8545:8545"
+    volumes:
+      - geth-1:/root/.ethereum
+    command: --rpc --rpcaddr "0.0.0.0" --syncmode "light" --goerli
+volumes:
+  geth-1:
