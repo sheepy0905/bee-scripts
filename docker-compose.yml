@@ -13,6 +13,11 @@ services:
   bee-1:
     image: ethersphere/bee:0.6.2
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
     environment:
       - BEE_API_ADDR
       - BEE_BOOTNODE
